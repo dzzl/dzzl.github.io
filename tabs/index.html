@@ -1,0 +1,27 @@
+<style>
+
+.tab-content section,
+.tab-content section:target ~ section:last-child { display:none; }
+
+.tab-content section:target,
+.tab-content section:last-child { display:block; }
+
+</style>
+
+
+<nav class="tab">
+	<a href="#tab1">tab 1</a>
+	<a href="#tab2">tab 2</a>
+	<a href="#tab3">tab 3</a>
+</nav>
+
+
+<div class="tab-content">
+
+	<section id="tab2">tab 2 content</section>
+	
+	<section id="tab3">tab 3 content</section>
+	
+	<section id="tab1">tab 1 content</section>
+
+</div>
