@@ -1,0 +1,35 @@
+<style>
+body {
+	margin:0;
+	overflow:hidden;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-wrap:wrap;
+	perspective:1px;
+	transition:10s;
+}
+body:hover {
+	perspective:1000px;
+}
+div {
+	height:100px;
+	width:100px;
+	margin:20px;
+	transform:rotateY(90deg) rotateX(0deg);
+	transition:10s;
+	border:2px solid magenta;
+}
+body:hover div:nth-child(odd){
+	transform:rotateY(90deg) rotateX(45deg);
+	background:orange;
+}
+body:hover div:nth-child(even){
+	transform:rotateY(90deg) rotateX(-45deg);
+	background:cyan;
+}
+body:hover div {
+	
+}
+</style>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
