@@ -3,59 +3,70 @@ class Entity {
 
     constructor(options = {}) {
         Object.assign(this, {
-            name: "entityName",
-            dimensions: [20,20],
-            position: [50,50],
-            bgColor: '#000',
-            moveAmount: 1,
-            momentum: [0,0],
-            bounds: [0,0,0,0]
+            "name": "entityName",
+            "dimensions": {
+                x: 20,
+                y: 20
+            },
+            "position": {
+                x: 50,
+                y: 50
+            },
+            "bgColor": "#000",
+            "moveAmount": 1,
+            "momentum": {
+                x: 50,
+                y: 50
+            },
+            "bounds": {
+                "up": 0,
+                "right": 0,
+                "down": 0,
+                "left": 0
+            },
+            "dead": false
         }, options);
+        this.bounds = {
+            "up": this.position.y,
+            "right": (this.position.x + this.dimensions.x),
+            "down": (this.position.y + this.dimensions.y),
+            "left": this.position.x
+        }
     }
 
     move(x, y, perimeter) {
-
-        this.bounds = [
-            this.position[1],
-            (this.position[0] + this.dimensions[0]),
-            (this.position[1] + this.dimensions[1]),
-            this.position[0]
-        ]
         
-        let destination = [
-            (this.bounds[0] + (this.moveAmount * y)),
-            (this.bounds[1] + (this.moveAmount * x)),
-            (this.bounds[2] + (this.moveAmount * y)),
-            (this.bounds[3] + (this.moveAmount * x)),
-        ]
-
-        let directionOob = [false, false]
-        
-        if ((y === -1) && (destination[0] < perimeter[0])){
-            directionOob[1] = true;
-        };
-        if ((x === 1) && (destination[1] > perimeter[1])){
-            directionOob[0] = true;
-            //works
-        };
-        if ((y === 1) && (destination[2] > perimeter[2])){
-            directionOob[1] = true;
-            //works
-        };
-        if ((x === -1) && (destination[3] < perimeter[3])){
-            directionOob[0] = true;
-        };
-        
-
-
-        if (directionOob[0] === false){
-            this.position[0] = (this.position[0] + (this.moveAmount * x));
-        }
-        if (directionOob[1] === false) {
-            this.position[1] = (this.position[1] + (this.moveAmount * y));
+        let destination = {
+            "x": (this.bounds.left + (this.moveAmount * x)),
+            "y": (this.bounds.up + (this.moveAmount * y))
         }
 
+        if (y){
+            if ((y === -1) && (destination.y <= perimeter.up)) {
+                destination.y = 0;
+            }
+            if ((y === 1) && ((destination.y + this.dimensions.y) >= perimeter.down)) {
+                destination.y = (perimeter.down - this.dimensions.y);
+            }
+        }
+        if (x) {
+            if ((x === 1) && ((destination.x + this.dimensions.x) >= perimeter.right)) {
+                destination.x = (perimeter.right - this.dimensions.x);
+            }
+            if ((x === -1) && (destination.x <= perimeter.left)) {
+                destination.x = 0;
+            }
+        }
 
+        this.position.x = destination.x;
+        this.position.y = destination.y;
+
+        this.bounds = {
+            "up": this.position.y,
+            "right": (this.position.x + this.dimensions.x),
+            "down": (this.position.y + this.dimensions.y),
+            "left": this.position.x
+        }
 
     }
 
@@ -75,19 +86,19 @@ class Move {
         this.keyCodes = [38, 39, 40, 37];
         this.keyDirection = ["⬆", "▶", "⬇", "◀"]
         this.moveDirection = [{
-            "x": 0,
-            "y": -1
+            x: 0,
+            y: -1
         },
         {
-            "x": 1,
-            "y": 0
+            x: 1,
+            y: 0
         },
         {
-            "x": 0,
-            "y": 1
+            x: 0,
+            y: 1
         }, {
-            "x": -1,
-            "y": 0
+            x: -1,
+            y: 0
         }];
 
         this.keyStates = new Array(this.keyCodes.length);
@@ -100,35 +111,57 @@ class Move {
         //drawables
         this.canvas = document.querySelector("canvas");
         this.canvasContext = this.canvas.getContext("2d");
-        this.perim = [0, this.canvas.width, this.canvas.height, 0]
+        this.perim = {
+            "up": 0,
+            "right": this.canvas.width,
+            "down": this.canvas.height,
+            "left": 0
+        };
 
         //entities
         let player = {
             "name": "player",
-            "position": [150,150],
+            "position": {
+                x: 150,
+                y: 150
+            },
             "moveAmount": 2.5,
             "bgColor": "#ff00ff"
         };
         let enemies = [
             {
                 "name": "enemy1",
-                "dimensions": [40,40],
-                "position": [100,50],
-                "moveAmount": 1.5,
+                "position": {
+                    x: 100,
+                    y: 50
+                },
+                "moveAmount": 3.5,
                 "bgColor": "#0000ff"
             },
             {
                 "name": "enemy2",
-                "dimensions": [40, 40],
-                "position": [200,200],
-                "moveAmount": 2,
+                "position": {
+                    x: 200,
+                    y: 200
+                },
+                "dimensions": {
+                    x: 40,
+                    y: 40
+                },
+                "moveAmount": 5,
                 "bgColor": "#008000"
             },
             {
                 "name": "enemy3",
-                "dimensions": [40, 40],
-                "position": [5,100],
-                "moveAmount": 0.5,
+                "position": {
+                    x: 5,
+                    y: 100
+                },
+                "dimensions": {
+                    x: 30,
+                    y: 60
+                },
+                "moveAmount": 6.5,
                 "bgColor": "#a52a2a"
             }
         ];
@@ -162,22 +195,27 @@ class Move {
 
         //draw enemies
         this.enemies.forEach(e => {
-            this.canvasContext.fillStyle = e.bgColor;
-            this.canvasContext.fillRect(
-                e.position[0],
-                e.position[1],
-                e.dimensions[0],
-                e.dimensions[1]
-            );
+
+            this.checkCollision(e);
+
+            if (e.dead != true){
+                this.canvasContext.fillStyle = e.bgColor;
+                this.canvasContext.fillRect(
+                    e.position.x,
+                    e.position.y,
+                    e.dimensions.x,
+                    e.dimensions.y
+                );
+            }
         });
 
         //draw player
         this.canvasContext.fillStyle = this.player.bgColor;
         this.canvasContext.fillRect(
-            this.player.position[0],
-            this.player.position[1],
-            this.player.dimensions[0],
-            this.player.dimensions[1]
+            this.player.position.x,
+            this.player.position.y,
+            this.player.dimensions.x,
+            this.player.dimensions.y
         );
     }
 
@@ -211,6 +249,21 @@ class Move {
             this.tickCount++;
             this.tick();
         })
+    }
+
+    checkCollision(e) {
+
+        if (
+            (this.player.bounds.left < e.bounds.right)
+            &&
+            (this.player.bounds.right > e.bounds.left)
+            &&
+            (this.player.bounds.up < e.bounds.down)
+            &&
+            (this.player.bounds.down > e.bounds.up)
+        ){
+            e.dead = true;
+        }
     }
 
     monitorKeypresses() {
