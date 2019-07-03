@@ -13,13 +13,13 @@ div {
   height: 150px;
   border:1px solid rgba(0,0,0,.5);
   border-radius:50%;
-  transition:all 0.75s;
+  transition:transform 0.75s;
+  margin: 3px;
 }
 div > div {
-	transform:translate(-1px,-1px);
+  transform:translate(-1px,-1px);
 }
-body > div:hover div {
-  margin:3px;
+body:hover > div div {
   transform:rotate(3deg);
 }
 
