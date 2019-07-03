@@ -35,13 +35,13 @@ class Entity {
     }
 
     move(x, y, perimeter) {
-        
+
         let destination = {
             "x": (this.bounds.left + (this.moveAmount * x)),
             "y": (this.bounds.up + (this.moveAmount * y))
         }
 
-        if (y){
+        if (y) {
             if ((y === -1) && (destination.y <= perimeter.up)) {
                 destination.y = 0;
             }
@@ -166,10 +166,14 @@ class Move {
             }
         ];
 
+        this.tailLength = 0;
+
+        this.playerHistory = new Array(10);
+
         this.player = new Entity(player);
 
         this.enemies = [];
-        enemies.forEach((e,i) => {
+        enemies.forEach((e, i) => {
             this.enemies[i] = new Entity(e);
         })
 
@@ -196,9 +200,8 @@ class Move {
         //draw enemies
         this.enemies.forEach(e => {
 
-            this.checkCollision(e);
-
-            if (e.dead != true){
+            if (e.dead != true) {
+                this.checkCollision(e);
                 this.canvasContext.fillStyle = e.bgColor;
                 this.canvasContext.fillRect(
                     e.position.x,
@@ -206,8 +209,24 @@ class Move {
                     e.dimensions.x,
                     e.dimensions.y
                 );
-            }
+            };
         });
+
+        let tailPiece = [];
+        if (this.tailLength > 0){
+            tailPiece[0] = {
+                x: this.playerHistory[this.playerHistory.length-1].x,
+                y: this.playerHistory[this.playerHistory.length-1].y
+            }
+            
+            this.canvasContext.fillStyle = "#000000";
+            this.canvasContext.fillRect(
+                tailPiece[0].x,
+                tailPiece[0].y,
+                this.player.dimensions.x,
+                this.player.dimensions.y
+            );
+        };
 
         //draw player
         this.canvasContext.fillStyle = this.player.bgColor;
@@ -233,17 +252,25 @@ class Move {
 
                     this.doMove(this.player, this.moveDirection[i]);
 
+                    this.playerHistory.pop();
+                    this.playerHistory.unshift({
+                        "x": this.player.position.x,
+                        "y": this.player.position.y
+                    });
+
                 }
                 if (this.keyTaps[i] === true) {
                     this.keyTaps[i] = false;
                 }
             });
 
+
+
             //move each enemy random direction
-            this.enemies.forEach(e => {
-                let randomDirection = Math.floor(Math.random() * Math.floor(4))
-                this.doMove(e, this.moveDirection[randomDirection]);
-            });
+            //this.enemies.forEach(e => {
+            //    let randomDirection = Math.floor(Math.random() * Math.floor(4))
+            //    this.doMove(e, this.moveDirection[randomDirection]);
+            //});
 
             //console.log('tick ' + this.tickCount + ': ' + this.keysHeld);
             this.tickCount++;
@@ -261,8 +288,9 @@ class Move {
             (this.player.bounds.up < e.bounds.down)
             &&
             (this.player.bounds.down > e.bounds.up)
-        ){
+        ) {
             e.dead = true;
+            this.tailLength++;
         }
     }
 
@@ -291,7 +319,7 @@ class Move {
         });
     }
 
-    returnCurrentTick(){
+    returnCurrentTick() {
         return ('tick: ' + this.tickCount + '   ');
     }
 
