@@ -24,7 +24,8 @@ class Entity {
                 "down": 0,
                 "left": 0
             },
-            "dead": false
+            "dead": false,
+            "shape": "square"
         }, options);
         this.bounds = {
             "up": this.position.y,
@@ -126,7 +127,8 @@ class Move {
                 y: 150
             },
             "moveAmount": 2.5,
-            "bgColor": "#ff00ff"
+            "bgColor": "red",
+            "shape": "circle"
         };
         let enemies = [
             {
@@ -163,12 +165,38 @@ class Move {
                 },
                 "moveAmount": 6.5,
                 "bgColor": "#a52a2a"
+            },
+            {
+                "name": "enemy4",
+                "position": {
+                    x: 260,
+                    y: 260
+                },
+                "dimensions": {
+                    x: 10,
+                    y: 10
+                },
+                "moveAmount": 0.5,
+                "bgColor": "#a52a2a"
+            },
+            {
+                "name": "enemy5",
+                "position": {
+                    x: 260,
+                    y: 50
+                },
+                "dimensions": {
+                    x: 20,
+                    y: 20
+                },
+                "moveAmount": 1.5,
+                "bgColor": "#a52a2a"
             }
         ];
 
         this.tailLength = 0;
 
-        this.playerHistory = new Array(10);
+        this.playerHistory = [];
 
         this.player = new Entity(player);
 
@@ -212,21 +240,30 @@ class Move {
             };
         });
 
+
         let tailPiece = [];
-        if (this.tailLength > 0){
-            tailPiece[0] = {
-                x: this.playerHistory[this.playerHistory.length-1].x,
-                y: this.playerHistory[this.playerHistory.length-1].y
-            }
+        for (let i = 1; i < this.tailLength + 1; i++) {
             
-            this.canvasContext.fillStyle = "#000000";
-            this.canvasContext.fillRect(
-                tailPiece[0].x,
-                tailPiece[0].y,
-                this.player.dimensions.x,
-                this.player.dimensions.y
-            );
-        };
+            if (this.playerHistory[(i * 10)-1] !== undefined) {
+                
+
+                tailPiece[i] = {
+                    x: this.playerHistory[(i * 10)-1].x,
+                    y: this.playerHistory[(i * 10)-1].y
+                }
+
+                this.canvasContext.fillStyle = "limegreen";
+                this.canvasContext.fillRect(
+                    tailPiece[i].x,
+                    tailPiece[i].y,
+                    this.player.dimensions.x,
+                    this.player.dimensions.y
+                );
+            }
+
+        }
+
+
 
         //draw player
         this.canvasContext.fillStyle = this.player.bgColor;
@@ -252,11 +289,19 @@ class Move {
 
                     this.doMove(this.player, this.moveDirection[i]);
 
-                    this.playerHistory.pop();
-                    this.playerHistory.unshift({
-                        "x": this.player.position.x,
-                        "y": this.player.position.y
-                    });
+                    if (this.playerHistory.length < (this.tailLength * 10)) {
+                        this.playerHistory.unshift({
+                            "x": this.player.position.x,
+                            "y": this.player.position.y
+                        });
+                    } else {
+                        this.playerHistory.pop();
+                        this.playerHistory.unshift({
+                            "x": this.player.position.x,
+                            "y": this.player.position.y
+                        });
+                    }
+
 
                 }
                 if (this.keyTaps[i] === true) {
