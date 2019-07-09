@@ -18,12 +18,6 @@ class Entity {
                 x: 50,
                 y: 50
             },
-            "bounds": {
-                "up": 0,
-                "right": 0,
-                "down": 0,
-                "left": 0
-            },
             "dead": false,
             "shape": "square"
         }, options);
@@ -195,19 +189,17 @@ class Move {
         ];
 
         this.tailLength = 0;
-
         this.playerHistory = [];
 
         this.player = new Entity(player);
 
         this.enemies = [];
-        enemies.forEach((e, i) => {
-            this.enemies[i] = new Entity(e);
-        })
 
+        ////use pre defined enemies
+        //enemies.forEach((e, i) => {
+        //    this.enemies[i] = new Entity(e);
+        //})
 
-        //go
-        this.draw();
         this.tick();
 
     }
@@ -222,12 +214,11 @@ class Move {
 
     draw() {
 
-        //clear whole canvas
+        //blitz canvas
         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         //draw enemies
         this.enemies.forEach(e => {
-
             if (e.dead != true) {
                 this.checkCollision(e);
                 this.canvasContext.fillStyle = e.bgColor;
@@ -241,12 +232,12 @@ class Move {
         });
 
 
+        //draw tail pieces
         let tailPiece = [];
         for (let i = 1; i < this.tailLength + 1; i++) {
             
             if (this.playerHistory[(i * 10)-1] !== undefined) {
                 
-
                 tailPiece[i] = {
                     x: this.playerHistory[(i * 10)-1].x,
                     y: this.playerHistory[(i * 10)-1].y
@@ -259,10 +250,10 @@ class Move {
                     this.player.dimensions.x,
                     this.player.dimensions.y
                 );
+
             }
 
         }
-
 
 
         //draw player
@@ -311,6 +302,36 @@ class Move {
 
 
 
+            //gen random enemies
+            if (this.tickCount % 100 === 0){
+
+                let newEnemyDimensions = {
+                    x: Math.floor(Math.random() * (30 - 5 + 1) + 5),
+                    y: Math.floor(Math.random() * (30 - 5 + 1) + 5)
+                }
+
+                let newEnemyPosition = {
+                    x: Math.floor(Math.random() * ((this.perim.right - newEnemyDimensions.x) - this.perim.left + 1) + this.perim.left),
+                    y: Math.floor(Math.random() * ((this.perim.down - newEnemyDimensions.y) - this.perim.up + 1) + this.perim.up)
+                }
+
+                let newRandomEnemy = {
+                    "name": "EnemyGen",
+                    "dimensions": {
+                        x: newEnemyDimensions.x,
+                        y: newEnemyDimensions.y
+                    },
+                    "position": {
+                        x: newEnemyPosition.x,
+                        y: newEnemyPosition.y
+                    },
+                    "bgColor": "#" + Math.floor(Math.random() * 16777215).toString(16),
+                    "moveAmount": 2,
+                    "shape": "square"
+                };
+                this.enemies[this.enemies.length] = new Entity(newRandomEnemy);
+            }
+
             //move each enemy random direction
             //this.enemies.forEach(e => {
             //    let randomDirection = Math.floor(Math.random() * Math.floor(4))
@@ -322,6 +343,7 @@ class Move {
             this.tick();
         })
     }
+
 
     checkCollision(e) {
 
