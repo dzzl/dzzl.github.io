@@ -5,8 +5,8 @@ class Entity {
         Object.assign(this, {
             "name": "entityName",
             "dimensions": {
-                x: 20,
-                y: 20
+                x: 50,
+                y: 50
             },
             "position": {
                 x: 50,
@@ -21,12 +21,31 @@ class Entity {
             "dead": false,
             "shape": "square"
         }, options);
+
+        let boundsCalc = {};
+
+        // switch (this.shape) {
+        //     case "square":
+                boundsCalc.up = this.position.y;
+                boundsCalc.right = (this.position.x + this.dimensions.x);
+                boundsCalc.down = (this.position.y + this.dimensions.y);
+                boundsCalc.left = this.position.x;
+         //         break;
+         //     case "circle":
+         //         boundsCalc.up = this.position.y - (this.dimensions.x / 2);
+         //         boundsCalc.right = (this.position.x + (this.dimensions.x / 2));
+         //         boundsCalc.down = (this.position.y + (this.dimensions.x / 2));
+         //         boundsCalc.left = this.position.x - (this.dimensions.x / 2);
+         //         break;
+         // }
+
         this.bounds = {
-            "up": this.position.y,
-            "right": (this.position.x + this.dimensions.x),
-            "down": (this.position.y + this.dimensions.y),
-            "left": this.position.x
+            up: boundsCalc.up,
+            right: boundsCalc.right,
+            down: boundsCalc.down,
+            left: boundsCalc.left
         }
+
     }
 
     move(x, y, perimeter) {
@@ -132,7 +151,8 @@ class Move {
                     y: 50
                 },
                 "moveAmount": 3.5,
-                "bgColor": "#0000ff"
+                "bgColor": "#0000ff",
+                "shape": "circle"
             },
             {
                 "name": "enemy2",
@@ -145,7 +165,8 @@ class Move {
                     y: 40
                 },
                 "moveAmount": 5,
-                "bgColor": "#008000"
+                "bgColor": "#008000",
+                "shape": "circle"
             },
             {
                 "name": "enemy3",
@@ -195,10 +216,10 @@ class Move {
 
         this.enemies = [];
 
-        ////use pre defined enemies
-        //enemies.forEach((e, i) => {
-        //    this.enemies[i] = new Entity(e);
-        //})
+        //use pre defined enemies
+        enemies.forEach((e, i) => {
+            this.enemies[i] = new Entity(e);
+        })
 
         this.tick();
 
@@ -212,6 +233,29 @@ class Move {
     }
 
 
+    drawShape(fillColour, position, dimensions, shape){
+
+        this.canvasContext.fillStyle = fillColour;
+
+        switch (shape) {
+            case "square":
+                this.canvasContext.fillRect(
+                    position.x,
+                    position.y,
+                    dimensions.x,
+                    dimensions.y
+                );
+                break;
+            case "circle":
+                this.canvasContext.beginPath();
+                this.canvasContext.arc(position.x, position.y,   (dimensions.x / 2), 0, 2 * Math.PI);
+                this.canvasContext.fill();
+                break;
+        }
+
+    }
+
+
     draw() {
 
         //blitz canvas
@@ -220,15 +264,11 @@ class Move {
         //draw enemies
         this.enemies.forEach(e => {
             if (e.dead != true) {
-                this.checkCollision(e);
-                this.canvasContext.fillStyle = e.bgColor;
-                this.canvasContext.fillRect(
-                    e.position.x,
-                    e.position.y,
-                    e.dimensions.x,
-                    e.dimensions.y
-                );
-            };
+                this.checkCollision(this.player,e);
+                
+                this.drawShape(e.bgColor, e.position, e.dimensions, e.shape);
+
+            }
         });
 
 
@@ -241,15 +281,9 @@ class Move {
                 tailPiece[i] = {
                     x: this.playerHistory[(i * 10)-1].x,
                     y: this.playerHistory[(i * 10)-1].y
-                }
+                };
 
-                this.canvasContext.fillStyle = "limegreen";
-                this.canvasContext.fillRect(
-                    tailPiece[i].x,
-                    tailPiece[i].y,
-                    this.player.dimensions.x,
-                    this.player.dimensions.y
-                );
+                this.drawShape("limegreen", tailPiece[i], this.player.dimensions, this.player.shape);
 
             }
 
@@ -257,13 +291,9 @@ class Move {
 
 
         //draw player
-        this.canvasContext.fillStyle = this.player.bgColor;
-        this.canvasContext.fillRect(
-            this.player.position.x,
-            this.player.position.y,
-            this.player.dimensions.x,
-            this.player.dimensions.y
-        );
+
+        this.drawShape(this.player.bgColor, this.player.position, this.player.dimensions, this.player.shape);
+
     }
 
     tick() {
@@ -303,34 +333,34 @@ class Move {
 
 
             //gen random enemies
-            if (this.tickCount % 100 === 0){
-
-                let newEnemyDimensions = {
-                    x: Math.floor(Math.random() * (30 - 5 + 1) + 5),
-                    y: Math.floor(Math.random() * (30 - 5 + 1) + 5)
-                }
-
-                let newEnemyPosition = {
-                    x: Math.floor(Math.random() * ((this.perim.right - newEnemyDimensions.x) - this.perim.left + 1) + this.perim.left),
-                    y: Math.floor(Math.random() * ((this.perim.down - newEnemyDimensions.y) - this.perim.up + 1) + this.perim.up)
-                }
-
-                let newRandomEnemy = {
-                    "name": "EnemyGen",
-                    "dimensions": {
-                        x: newEnemyDimensions.x,
-                        y: newEnemyDimensions.y
-                    },
-                    "position": {
-                        x: newEnemyPosition.x,
-                        y: newEnemyPosition.y
-                    },
-                    "bgColor": "#" + Math.floor(Math.random() * 16777215).toString(16),
-                    "moveAmount": 2,
-                    "shape": "square"
-                };
-                this.enemies[this.enemies.length] = new Entity(newRandomEnemy);
-            }
+            // if (this.tickCount % 100 === 0){
+            //
+            //     let newEnemyDimensions = {
+            //         x: Math.floor(Math.random() * (30 - 5 + 1) + 5),
+            //         y: Math.floor(Math.random() * (30 - 5 + 1) + 5)
+            //     }
+            //
+            //     let newEnemyPosition = {
+            //         x: Math.floor(Math.random() * ((this.perim.right - newEnemyDimensions.x) - this.perim.left + 1) + this.perim.left),
+            //         y: Math.floor(Math.random() * ((this.perim.down - newEnemyDimensions.y) - this.perim.up + 1) + this.perim.up)
+            //     }
+            //
+            //     let newRandomEnemy = {
+            //         "name": "EnemyGen",
+            //         "dimensions": {
+            //             x: newEnemyDimensions.x,
+            //             y: newEnemyDimensions.y
+            //         },
+            //         "position": {
+            //             x: newEnemyPosition.x,
+            //             y: newEnemyPosition.y
+            //         },
+            //         "bgColor": "#" + Math.floor(Math.random() * 16777215).toString(16),
+            //         "moveAmount": 2,
+            //         "shape": "square"
+            //     };
+            //     this.enemies[this.enemies.length] = new Entity(newRandomEnemy);
+            // }
 
             //move each enemy random direction
             //this.enemies.forEach(e => {
@@ -345,18 +375,39 @@ class Move {
     }
 
 
-    checkCollision(e) {
+    checkCollision(entity1, entity2) {
+
+
+        //switch (shape) {
+        //    case "square":
+        //        this.canvasContext.fillStyle = fillColour;
+        //        this.canvasContext.fillRect(
+        //            position.x,
+        //            position.y,
+        //            dimensions.x,
+        //            dimensions.y
+        //        );
+        //        break;
+        //    case "circle":
+        //        this.canvasContext.beginPath();
+        //        this.canvasContext.arc(position.x, position.y,   (dimensions.x / 2), 0, 2 * Math.PI);
+        //        this.canvasContext.fill();
+        //        break;
+        //}
+
+
+
 
         if (
-            (this.player.bounds.left < e.bounds.right)
+            (entity1.bounds.left < entity2.bounds.right)
             &&
-            (this.player.bounds.right > e.bounds.left)
+            (entity1.bounds.right > entity2.bounds.left)
             &&
-            (this.player.bounds.up < e.bounds.down)
+            (entity1.bounds.up < entity2.bounds.down)
             &&
-            (this.player.bounds.down > e.bounds.up)
+            (entity1.bounds.down > entity2.bounds.up)
         ) {
-            e.dead = true;
+            entity2.dead = true;
             this.tailLength++;
         }
     }
