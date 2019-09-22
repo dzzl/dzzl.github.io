@@ -1,0 +1,53 @@
+<style>
+    .progress {
+        height: 20px;
+        background: peru;
+        position: relative;
+    }
+
+    .progress .inner {
+        background: orange;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+    }
+</style>
+
+<video controls muted width="800">
+    <source src="https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm" type="video/webm">
+    <source src="https://interactive-examples.mdn.mozilla.net/media/examples/flower.mp4" type="video/mp4">
+    <track label="eng subs" kind="subtitles" srclang="eng" src="html5test4subt.vtt" default>
+    no support, click <a href="https://interactive-examples.mdn.mozilla.net/media/examples/flower.webm">here</a> to download the video
+</video>
+<span onclick="document.querySelector('video').play();">&gt;</span>
+<span onclick="document.querySelector('video').pause();">||</span>
+
+<div class="progress">
+    <div class="inner"></div>
+</div>
+
+<script>
+
+    let videoElement = document.querySelector('video');
+
+    function getCurrentTime() {
+        let width = (videoElement.currentTime / videoElement.duration) * 100
+        document.querySelector('.inner').style.width = width + '%';
+    }
+
+    videoElement.addEventListener('timeupdate', getCurrentTime);
+
+    document.querySelector('.progress').addEventListener('click', e => getPos(e));
+
+    function getPos(e) {
+
+        let totalwidth = document.querySelector('.progress').clientWidth;
+        let clickedPos = e.layerX;
+
+        let clickedPerc = (clickedPos / totalwidth) * 100;
+
+        videoElement.currentTime = (videoElement.duration / 100) * clickedPerc;
+    }
+</script>
