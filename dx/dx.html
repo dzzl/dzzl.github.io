@@ -1,0 +1,30 @@
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html {
+  perspective: 800px;
+  perspective-origin: 50% 100px;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  transform-style: preserve-3d;
+  transform: rotateX(90deg) rotateZ(10deg);
+  transform-origin: bottom right
+}
+div {
+  flex: 0 0 25%;
+  background: rgba(0,0,0,0.35);
+  border: 2px solid rgba(0,0,0,0.65);
+  transition: transform 1s;
+  transform-style: preserve-3d;
+}
+div:hover {
+  transform: translateZ(40px);
+}
+</style>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
