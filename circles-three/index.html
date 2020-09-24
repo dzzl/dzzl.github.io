@@ -1,0 +1,76 @@
+<style>
+html {
+  overflow: hidden;
+}
+
+body {
+  background: greenyellow;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
+
+.circle {
+  width: 70vw;
+  height: 70vw;
+  max-height: 500px;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+  font-size: 1.2em;
+  overflow: hidden;
+}
+.circle__left, .circle__right {
+  content: "";
+  height: 100%;
+  width: 50%;
+  shape-margin: 10px;
+}
+.circle__left {
+  float: left;
+  shape-outside: polygon(0 0, 98% 0, 50% 6%, 23.4% 17.3%, 6% 32.6%, 0 50%, 6% 65.6%, 23.4% 82.7%, 50% 94%, 98% 100%, 0 100%);
+}
+.circle__right {
+  float: right;
+  shape-outside: polygon(2% 0%, 100% 0%, 100% 100%, 2% 100%, 50% 94%, 76.6% 82.7%, 94% 65.6%, 100% 50%, 94% 32.6%, 76.6% 17.3%, 50% 6%);
+}
+.circle__actual {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: inherit;
+  background-size: auto;
+  background-image: linear-gradient(0deg, blue, cyan);
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg  xmlns="http://www.w3.org/2000/svg" ><rect x="5" y="5" width="100%" height="100%" style="height:calc(100% - 10px);width:calc(100% - 10px)" rx="50%" ry="50%" stroke-width="10" fill="transparent" stroke="white"/></svg>') 0/100% 100%;
+  animation: dash 10s linear infinite;
+  transform: rotate(0deg);
+}
+
+@keyframes dash {
+  to {
+    transform: rotate(359deg);
+  }
+}
+</style>
+
+
+
+    <div class="circle">
+
+            <div class="circle__left"></div>
+            <div class="circle__right"></div>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus, modi est distinctio libero illo quod eveniet rerum. Tenetur, architecto! Nisi molestiae facere quam eveniet eaque, quis odio harum officia ab odit enim sit aut vel architecto eligendi ad quaerat exercitationem? Sit minima quam magnam modi iusto ipsum nostrum, praesentium tempore corporis exercitationem cupiditate consequuntur necessitatibus id cumque itaque, ullam voluptatum quasi numquam ex incidunt! Quidem, laborum odio. Animi odit, doloribus alias autem nisi quasi molestiae natus officia eaque quidem? Quo, ab quibusdam rerum iste laborum eum odit asperiores est temporibus quod alias ipsum aliquid earum consectetur praesentium dolor consequuntur veritatis, vel odio molestias dolores aliquam? Delectus, vel? Incidunt sequi debitis nulla. Vitae nesciunt, eligendi ipsum vero reiciendis laudantium fugiat, quod at laboriosam porro quas sapiente voluptatibus pariatur! Tempore exercitationem esse, voluptate possimus ut provident quae dolores error omnis quaerat, natus aperiam. Dolorum est eum laboriosam exercitationem, at ad aliquam dolorem.
+
+        <div class="circle__actual"></div>
+
+    </div>
+
+</body>
