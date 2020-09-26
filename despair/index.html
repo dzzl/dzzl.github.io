@@ -1,0 +1,35 @@
+<body
+ onmousemove="
+    document.documentElement.style.setProperty('--x', `${event.clientX}px`);
+    document.documentElement.style.setProperty('--y', `${event.clientY}px`);
+"
+onclick="window.location.href=window.location.href"
+>
+
+<style>
+
+    :root {
+        --y: -100vw;
+        --x: -100vw;
+    }
+
+    body {
+        background: url('https://picsum.photos/1920/1080') no-repeat center center;
+        margin: 0;
+        cursor: none;
+        background-size: cover;
+    }
+
+    body:before {
+        content: '';
+        position: fixed;
+        transform: translate(-50%, -50%);
+        height: 400px;
+        width: 400px;
+        top: var(--y);
+        left: var(--x);
+        border-radius: 50%;
+        backdrop-filter: grayscale(100%);
+        border: 2px solid;
+    }
+</style>
