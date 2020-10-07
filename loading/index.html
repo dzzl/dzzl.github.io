@@ -1,90 +1,90 @@
 <style>
+:root {
+  --pi: 3.14159265358979;
+  --circleWidth: 225px;
+  --circleCirumference: calc(((var(--circleWidth) / 2) * var(--pi)) * 2);
+  --circleStrokeWidth: 10px;
+  --vermilion: #E34234;
+}
 
-    :root {
-        --pi: 3.14159265358979;
-        --circleWidth: 225px;
-        --circleCirumference: calc(((var(--circleWidth) / 2) * var(--pi)) * 2);
-        --circleStrokeWidth: 10px;
-	--vermilion: #E34234;
-    }
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    body {
-        margin: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-    }
+body:before {
+  content: 'Circumference';
+  font-size: 12px;
+  width: var(--circleCirumference);
+  line-height: 15px;
+  background: var(--vermilion);
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: 'Arial';
+}
 
-    body:before {
-        content: 'Circumference';
-        font-size: 12px;
-        width: var(--circleCirumference);
-        line-height: 15px;
-        background: var(--vermilion);
-	color: #fff;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        overflow: hidden;
-        white-space: nowrap;
-	font-family: 'Arial';
-    }
+input {
+  position: fixed;
+  top: 0;
+  left: 0;
+  line-height: 20px;
+}
 
-    input {
-	position: fixed;
-	top: 0;
-	left: 0;
-	line-height: 20px;
-    }
+svg {
+  height: var(--circleWidth);
+  width: var(--circleWidth);
+  border-radius: 50%;
+  background: pink;
+  max-height: 100vh;
+  max-width: 100vh;
+}
 
-    svg {
-        height: var(--circleWidth);
-        width: var(--circleWidth);
-	border-radius: 50%;
-	background: pink;
-	max-height: 100vh;
-	max-width: 100vh;
-    }
-    svg g {
-        transform-origin: center center;
-        animation: g 3s linear infinite;
-        transform: rotate(0deg);
-    }
+svg g {
+  transform-origin: center center;
+  animation: g 3s linear infinite;
+  transform: rotate(0deg);
+}
 
-    svg rect {
-        stroke: var(--vermilion);
-        fill: transparent;
-        height: calc(100% - var(--circleStrokeWidth));
-        width: calc(100% - var(--circleStrokeWidth));
-        stroke-dasharray: var(--circleCirumference);
-        stroke-width: var(--circleStrokeWidth);
-        animation: line 3s linear infinite;
-        stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
-    }
+svg rect {
+  stroke: var(--vermilion);
+  fill: transparent;
+  height: calc(100% - var(--circleStrokeWidth));
+  width: calc(100% - var(--circleStrokeWidth));
+  stroke-dasharray: var(--circleCirumference);
+  stroke-width: var(--circleStrokeWidth);
+  animation: line 3s linear infinite;
+  stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
+}
 
-    @keyframes g {
-        0% {
-            transform: rotate(calc((360deg / 8) * 0));
-        }
-        50% {
-            transform: rotate(calc((360deg / 8) * 1));
-        }
-        100% {
-            transform: rotate(calc((360deg / 8) * 8));
-        }
-    }
+@keyframes g {
+  0% {
+    transform: rotate(calc((360deg / 8) * 0));
+  }
+  50% {
+    transform: rotate(calc((360deg / 8) * 1));
+  }
+  100% {
+    transform: rotate(calc((360deg / 8) * 8));
+  }
+}
 
-    @keyframes line {
-        0% {
-            stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
-        }
-        50% {
-            stroke-dashoffset: calc((var(--circleCirumference) / 8) * 1);
-        }
-        100% {
-            stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
-        }
-    }
+@keyframes line {
+  0% {
+    stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
+  }
+  50% {
+    stroke-dashoffset: calc((var(--circleCirumference) / 8) * 1);
+  }
+  100% {
+    stroke-dashoffset: calc((var(--circleCirumference) / 8) * 7);
+  }
+}
 </style>
 
 <input value="225" placeholder="Width" type="number" min="100" max="500" oninput="document.documentElement.style.setProperty('--circleWidth', `${this.value}px`);">
