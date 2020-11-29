@@ -50,10 +50,10 @@ body {
 card {
   perspective: 600px;
 }
-card img {
+card .image {
   pointer-events: none;
-  vertical-align: top;
-  transform: none;
+  height: 320px;
+  width: 260px;
   transform-origin: center center;
 }
 card:hover {
