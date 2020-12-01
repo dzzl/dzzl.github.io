@@ -69,7 +69,7 @@ class Card {
 
         const step = () => {
             this.matrix.z = (this.matrix.z + 10);
-            if ((this.matrix.z < 100) && (this.mouseOut === false)) {
+            if ((this.matrix.z <= 100) && (this.mouseOut === false)) {
                 window.requestAnimationFrame(step);
                 this.doMove();
             } else {
