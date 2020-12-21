@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="card.css" />
+
+<card>
+    <div class="image" style="background-image: url('card.jpg');"></div>
+</card>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (_) => {
+
+        document.querySelectorAll(`card`).forEach(card => {
+            card.addEventListener('mousemove', event => {
+                card.style.setProperty('--offsetX', `${event.offsetX}`);
+                card.style.setProperty('--offsetY', `${event.offsetY}`);
+            }
+            )
+        })
+
+    })
+</script>

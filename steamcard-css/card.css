@@ -1,0 +1,73 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+card {
+  --edgeGrow: 50;
+  --width: 260;
+  --height: 320;
+  --xPosAsPercentage: calc(var(--offsetY) / (var(--width) + (var(--edgeGrow) * 2)) * 20);
+  --yPosAsPercentage: calc(var(--offsetX) / (var(--height) + (var(--edgeGrow) * 2)) * 20);
+  --xRotateAmount: calc((var(--xPosAsPercentage) - 10) * -1deg);
+  --yRotateAmount: calc((var(--yPosAsPercentage) - 10) * 1deg);
+  perspective: 600px;
+}
+@supports not (translate: 0) {
+  card {
+    transition: transform 0.75s;
+  }
+}
+card .image {
+  pointer-events: none;
+  height: calc(var(--height) * 1px);
+  width: calc(var(--width) * 1px);
+  transform-origin: center center;
+  position: relative;
+  transition: translate 0.75s, transform 0.75s;
+  background-size: cover;
+}
+card .image:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 0 50px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.75s;
+}
+card .image:before {
+  display: block;
+}
+card:hover {
+  padding: calc(var(--edgeGrow) * 1px);
+}
+@supports not (translate: 0) {
+  card:hover {
+    transition: transform 0.3s;
+    transform: scale(1.2);
+  }
+}
+card:hover .image {
+  translate: 0 0 100px;
+  transform: rotateX(var(--xRotateAmount)) rotateY(var(--yRotateAmount));
+  transition: translate 0.3s, transform 0s;
+}
+card:hover .image:after {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
