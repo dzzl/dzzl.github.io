@@ -1,53 +1,60 @@
-<span class="warning">chrome://flags/#enable-experimental-web-platform-features</span>
-<div class="square"></div>
+<span class="warning">
+  chrome://flags/#enable-experimental-web-platform-features
+</span>
+
+<div class="spinner"></div>
 
 <style>
-    body {
-        margin: 0;
-        height: 400vh;
+body {
+  height: 400vh;
+}
+
+.spinner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  border-radius: 50%;
+  border: 1px solid;
+  background-image: repeating-conic-gradient(
+    from 0deg,
+    red 0deg 30deg,
+    yellow 30deg 60deg,
+    blue 60deg 90deg
+  );
+}
+
+.warning {
+  position: fixed;
+  background-color: yellow;
+}
+
+@supports (animation-timeline: works) {
+  .warning {
+    display: none;
+  }
+
+  @keyframes progress {
+    from {
+      transform: rotate(0deg);
     }
-
-    .square {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        height: 100px;
-        width: 100px;
-        margin: auto;
-        border: 1px solid;
-        background-image: repeating-conic-gradient(from 0deg, red 0deg 30deg, yellow 30deg 60deg, blue 60deg 90deg);
-        border-radius: 50%;
+    
+    to {
+      transform: rotate(360deg);
     }
+  }
+  
+  @scroll-timeline progress-timeline {
+    time-range: 4s;
+  }
 
-    .warning {
-        position: fixed;
-        background-color: yellow;
-    }
-
-    @supports (animation-timeline: works) {
-        .warning {
-            display: none;
-        }
-
-        @keyframes progress {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @scroll-timeline progress-timeline {
-            time-range: 4s;
-        }
-
-        .square {
-            animation: 4s linear forwards progress;
-            animation-timeline: progress-timeline;
-        }
-    }
+  .spinner {
+    animation: 4s linear forwards progress;
+    animation-timeline: progress-timeline;
+  }
+}
 </style>
