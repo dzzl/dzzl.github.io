@@ -1,0 +1,99 @@
+<div class="cube">
+    <div class="side north">
+        <div class="side lid"></div>
+    </div>
+    <div class="side east"></div>
+    <div class="side south"></div>
+    <div class="side west"></div>
+    <div class="side base"></div>
+</div>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        perspective: 1000px;
+        padding-top: 10em;
+    }
+
+    div {
+        height: 10em;
+        width: 10em;
+    }
+
+    .cube {
+        display: grid;
+        transform: rotate3d(1.4, 0.29, -0.4, 77deg);
+        transform-origin: center;
+        transform-style: preserve-3d;
+    }
+
+    .side {
+        background: rgba(0, 0, 0, 0.2);
+        outline: 2px solid;
+        transition: 1s;
+        pointer-events: none;
+        grid-area: 1 / 1;
+        transform-style: preserve-3d;
+    }
+
+    .lid {
+        display: grid;
+        transform: rotateX(90deg);
+        transform-origin: bottom;
+        transition: 1.25s;
+    }
+
+    .north {
+        transform: rotateX(90deg);
+        transform-origin: top;
+    }
+
+    .south {
+        transform: rotateX(-90deg);
+        transform-origin: bottom;
+    }
+
+    .east {
+        transform: rotateY(90deg);
+        transform-origin: right;
+    }
+
+    .west {
+        transform: rotateY(-90deg);
+        transform-origin: left;
+    }
+
+    .cube:hover {
+        /*transform: rotate(180deg, 90deg);*/
+    }
+
+    .cube:hover .north {
+        transform: rotateX(180deg);
+    }
+
+    .cube:hover .south {
+        transform: rotateX(-180deg);
+    }
+
+    .cube:hover .east {
+        transform: rotateY(180deg);
+    }
+
+    .cube:hover .west {
+        transform: rotateY(-180deg);
+    }
+
+    .cube:hover .lid {
+        transform: rotateX(180deg)
+    }
+</style>
