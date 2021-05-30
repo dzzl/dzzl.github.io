@@ -9,17 +9,11 @@ body {
   height: 400vh;
 }
 
-.spinner {
+.spinner { /* streamlined */
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   height: 100px;
-  width: 100px;
-  margin: auto;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
-  border: 1px solid;
   background-image: repeating-conic-gradient(
     from 0deg,
     red 0deg 30deg,
@@ -29,8 +23,7 @@ body {
 }
 
 .warning {
-  position: fixed;
-  background-color: yellow;
+    background-color: yellow;
 }
 
 @supports (animation-timeline: works) {
